@@ -5,8 +5,10 @@
     <title>Warsztaty z JSa!</title>
   </head>
   <body>
+    <input type="text" id="inputZImieniem" placeholder="Podaj swoje imię" />
     <button id="przyciskPrzyjdz">Przyjdź</button>
     <button id="przyciskOdejdz">Odejdź</button>
+    <button id="przyciskZostan">Zostań</button>    
     <button id="przyciskPowiedzCos">Powiedz coś</button>
     <pre id="okno"></pre>
   </body>
@@ -14,11 +16,25 @@
     let wiadomosc = "Nie wiem, gdzie jesteś!";
 
     function przyjdz() {
-      wiadomosc = "Witaj!";
+      let imie = document.getElementById('inputZImieniem').value;
+      if (imie == '') {
+        wiadomosc = "Witaj, tajemniczy nieznajomy! Jak masz na imię?";
+      } else {
+        wiadomosc = 'Witaj, '+imie+'!';
+      }
     }
 
     function odejdz() {
-      wiadomosc = "Szerokiej drogi!";
+      let imie = document.getElementById('inputZImieniem').value;
+      if (imie == '') {
+        wiadomosc = 'Szerokiej drogi, tajemniczy nieznajomy!';
+      } else {
+      wiadomosc = 'Szerokiej drogi, '+imie+'!';
+      }
+    }
+
+    function zostan() {
+      wiadomosc = "Rozgość się!";
     }
 
     function powiedzCos() {
@@ -28,5 +44,6 @@
     document.getElementById("przyciskPowiedzCos").onclick = powiedzCos;
     document.getElementById("przyciskPrzyjdz").onclick = przyjdz;
     document.getElementById("przyciskOdejdz").onclick = odejdz;
+    document.getElementById("przyciskZostan").onclick = zostan;
   </script>
 </html>
