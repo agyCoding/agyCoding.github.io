@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Summer of Code - Day 4</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+  <body>
+    <div class="container" id="book-form">
+        
+            <form>
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" class="form-control" id="title" placeholder="Tytuł książki" name="title">
+                    <label for="title">Tytuł książki</label>
+                  </div>
+                  
+                  <div class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control" id="author" placeholder="Autor" name="author">
+                    <label for="author">Autor</label>
+                  </div>
+                  <div class="form-floating mt-3 mb-3">
+                    <input type="number" class="form-control" id="year" placeholder="Rok wydania" name="year">
+                    <label for="year">Rok wydania</label>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="button">Dodaj książkę</button>
+            </form>
+        
+        
+            <pre id="okno"></pre>
+            <ul id="books-list" class="list-group"></ul>
+        
+    </div>
+
+
+  </body>
+  <script>
+    let books = [];
+    function addBook(title, author, year) {
+        let book = {
+            title: title,
+            author: author,
+            year: year    
+        };
+        books.push(book);
+    }
+
+    function deleteBook(i) {
+        books.splice(i,1);
+        displayBooks();
+        
+        // Still need to figure out how to delete the heading when I delete all the books
+    }
+
+    function displayBooks() {
+        let bookForm = document.getElementById("book-form");
+        let booksList = document.getElementById("books-list");
+
+        // Clear the previously displayed list of books
+        while (booksList.firstChild) {
+        booksList.removeChild(booksList.firstChild);
+        }
+
+        let heading = document.querySelector('#book-form h2');
+            if (!heading) {
+                heading = document.createElement('h2');
+                heading.textContent = "Books List";
+                bookForm.insertBefore(heading, booksList); // Append heading before the ul
+            };
+
+            for (let i=0;i<books.length;i++) {
+                let bookItem = document.createElement('li');
+                bookItem.classList.add("list-group-item");
+                bookItem.textContent = "Title: " + books[i].title + " Author: " + books[i].author + " Year: " + books[i].year+ "   ";
+
+                let deleteButton = document.createElement('button');
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.textContent = 'Usuń książkę';
+
+                deleteButton.addEventListener('click', function() {
+                    deleteBook(i);
+                    displayBooks();
+                });
+
+                bookItem.appendChild(deleteButton);
+                booksList.appendChild(bookItem);
+            };
+
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // don't reload the page when clicking Dodaj ksiazke
+
+        let title = document.getElementById('title').value;
+        let author = document.getElementById('author').value;
+        let year = document.getElementById('year').value;
+
+        addBook(title,author,year);
+        displayBooks();
+    });
+
+  </script>
+</html>
