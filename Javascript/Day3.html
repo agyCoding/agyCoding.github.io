@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dzien 3 - Javascript Summer of Code</title>
+  </head>
+  <body>
+    <button id="guessTheNumberButton">Zgaduje!</button>
+    <pre id="okno"></pre>
+  </body>
+  <script>
+    const numberToBeGuessed = Math.floor(Math.random() * 11);
+    let numberOfGuesses = 0;
+
+    function promptUser() {
+        let no = 5-numberOfGuesses;
+        while (no>0) {
+            let userInput = prompt("Wybierz liczbe calkowita od 0 do 10. Pozostalo Ci "+no+" prob. Do testow: "+numberToBeGuessed,"");
+
+            if (userInput !== null) { // Check if user clicked Cancel
+                if (userInput<11) {
+                    numberOfGuesses++;
+                    if (userInput == numberToBeGuessed) {
+                    alert("Zgadlas! Ilosc prob: "+numberOfGuesses);
+                    break;
+                    } else if (userInput < numberToBeGuessed) {    
+                        no--;                   
+                        alert("Za malo. Pozostalo prob: "+ no);
+                    } else if (userInput > numberToBeGuessed) {
+                        no--;
+                        alert("Za duzo. Pozostalo prob: "+ no);
+                    }
+                }
+                else {
+                    alert("To nie byla poprawna liczba. Sprobuj jeszcze raz.");
+                }
+            }
+            else {
+                break; // User clicked Cancel, exit the loop
+            }
+        }
+        if (no==0) {
+            alert("Game over :(");
+        }
+    }
+    document.getElementById("guessTheNumberButton").onclick = promptUser;
+
+  </script>
+</html>
+
+
