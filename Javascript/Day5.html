@@ -16,24 +16,21 @@
   <body>
     <div class="container" id="book-form">
         <div class="row">
-            <div class="col-sm-2 text-center">
-                Dodaj kwiatek &#127804;
+            <div class="col-sm-3 text-center">
+                <button type="button" class="btn btn-light" id="waterButton">Podlej kwiatek &#128167;</button>
             </div>
-            <div class="col-sm-2 text-center">
-                Podlej kwiatek &#128167;
+            <div class="col-sm-3 text-center">
+                <button type="button" class="btn btn-light" id="fertilizeButton">Nawieź kwiatek &#128169;</button>
             </div>
-            <div class="col-sm-2 text-center">
-                Nawieź kwiatek &#128169;
+            <div class="col-sm-3 text-center">
+                <button type="button" class="btn btn-light" id="rescueButton">Ratuj kwiatek &#128657;</button>
             </div>
-            <div class="col-sm-2 text-center">
-                Ratuj kwiatek &#128657;
-            </div>
-            <div class="col-sm-2 text-center">
-                Zetnij kwiatek &#128298;
+            <div class="col-sm-3 text-center">
+                <button type="button" class="btn btn-light" id="cutButton">Zetnij kwiatek &#128298;</button>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 p-12 bg-success">
+            <div class="col-sm-12 p-12 bg-success" id="garden">
                 &#127804;
             </div>
         </div>
@@ -42,21 +39,82 @@
 
   </body>
   <script>
+    class Plant {
+        constructor(flowerType,water,state) {
+            this.flowerType = flowerType; // type of flower in HTML code
+            this.water = water; // amount of water
+            this.state = state; // dead or alive
+        }
+    }
+
+    // Pierwszy kwiatek z ktorym zaczyna sie gra
+    let plants = [new Plant("&#127804;",0,"alive")];
+
+    function displayPlants() {
+        let garden = document.getElementById("garden");
+        // clear the display of the garden
+        garden.innerHTML = "";
+
+        for (let i=0;i<plants.length;i++) {
+            // if the plant is dead (overwatered), ignore it's type and display a brown leaf
+            if (plants[i].state==="dead") {
+                garden.innerHTML += "&#127810; ";
+            } else {
+                garden.innerHTML += plants[i].flowerType+" ";
+            }
+        }
+    }
+
     function addPlant() {
-        // dodaj kwiatek.
+        let flowerType = "&#127804;"; // this can be later modified, sent to the function as a parameter when user can choose a different type of flower
+        let newPlant = new Plant(flowerType,0,"alive");
+        plants.push(newPlant);
+        displayPlants();
     }
     function waterPlants() {
+        for (let i=0;i<plants.length;i++) {
+            if (plants[i].water < 10) {
+                plants[i].water++;
+            } else if (plants[i].water == 10) {
+                plants[i].state = "dead";
+            };
+        }
         // podlej kwiatki. Każde podlanie zwiększa rozmiar rośliny (zmienia rozmiar czcionki emoji rośliny).
         // Jeśli roślina zostanie podlana więcej niż określoną liczbę razy (np. 5, 10), zamiera i zmienia się w emoji brązowych liści
     }
     function fertilize() {
+        if (plants.length<10) {
+            addPlant();
+        }
         // Każde dodanie nawozu powoduje, że na grządce pojawia się dodatkowa roślina. Jednakże, użytkownik nie może mieć więcej niż 10 roślin na grządce.
     }
     function rescuePlants() {
+        for (let i=0;i<plants.length;i++) {
+            if (plants[i].state === "dead") {
+                plants[i].water === 0;
+                plants[i].state === "alive"
+            };
+        };
         // Jeśli roślina zamarła, użytkownik może ją uratować, klikając na emoji karetki. Roślina wtedy „odżywa” i zaczyna od nowa. Jeśli jest więcej niż jedna roślina, karetka ratuje wszystkie zmarłe rośliny.
     }
     function cutPlant(index) {
+        let plantIndex = prompt("Którą roślinę chcesz zciąć?","");
+        if (!isNaN(plantIndex)) {
+            if (plantIndex < plants.length) {
+                plants.splice(plantIndex,1);
+            }
+        }
+        if (!plants.length > 0) {
+            addPlant();
+        }
         // Użytkownik musi podać numer rośliny, którą chce ściąć. Jeśli jest tylko jedna roślina, jest ona „ożywiana” i ilość wody dla tej rośliny jest resetowana do 0.
     }
+
+    document.getElementById("waterButton").addEventListener('click', waterPlants);
+    document.getElementById("fertilizeButton").addEventListener('click', fertilize);
+    document.getElementById("rescueButton").addEventListener('click', rescuePlants);
+    document.getElementById("cutButton").addEventListener('click',cutPlant);
+
+    window.onload = displayPlants();
   </script>
 </html>
