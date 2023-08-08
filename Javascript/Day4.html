@@ -44,19 +44,24 @@
   <script>
     let books = [];
     function addBook(title, author, year) {
-        let book = {
+      // check if the year is valid
+        const date = new Date();
+        const currentYear = date.getFullYear();
+        if (year > 1000 && year <= currentYear) {
+          let book = {
             title: title,
             author: author,
             year: year    
         };
         books.push(book);
+        } else {
+          alert("Podany rok wydania jest niepoprawny.");
+        }
     }
 
     function deleteBook(i) {
         books.splice(i,1);
         displayBooks();
-        
-        // Still need to figure out how to delete the heading when I delete all the books
     }
 
     function displayBooks() {
@@ -69,32 +74,41 @@
         }
 
         let heading = document.querySelector('#book-form h2');
-            if (!heading) {
-                heading = document.createElement('h2');
-                heading.textContent = "Books List";
-                bookForm.insertBefore(heading, booksList); // Append heading before the ul
-            };
 
-            for (let i=0;i<books.length;i++) {
-                let bookItem = document.createElement('li');
-                bookItem.classList.add("list-group-item");
-                bookItem.textContent = "Title: " + books[i].title + " Author: " + books[i].author + " Year: " + books[i].year+ "   ";
+        // If all books are deleted from the list, delete the heading as well.
+        if (!books.length > 0) {
+          heading.remove();
+        }
 
-                let deleteButton = document.createElement('button');
-                deleteButton.classList.add('btn', 'btn-danger');
-                deleteButton.textContent = 'Usuń książkę';
+        // If the heading doesnt't already exist and the books list isn't empty, create a heading
+        if (!heading && (books.length>0)) {
+            heading = document.createElement('h2');
+            heading.textContent = "Books List";
+            bookForm.insertBefore(heading, booksList); // Append heading before the ul
+        };
 
-                deleteButton.addEventListener('click', function() {
-                    deleteBook(i);
-                    displayBooks();
-                });
+        // Generate a list of books with the delete buttons
+        for (let i=0;i<books.length;i++) {
+            let bookItem = document.createElement('li');
+            bookItem.classList.add("list-group-item");
+            bookItem.textContent = "Title: " + books[i].title + " Author: " + books[i].author + " Year: " + books[i].year+ "   ";
 
-                bookItem.appendChild(deleteButton);
-                booksList.appendChild(bookItem);
-            };
+            let deleteButton = document.createElement('button');
+            deleteButton.classList.add('btn', 'btn-danger');
+            deleteButton.textContent = 'Usuń książkę';
+
+            deleteButton.addEventListener('click', function() {
+                deleteBook(i);
+                displayBooks();
+            });
+
+            bookItem.appendChild(deleteButton);
+            booksList.appendChild(bookItem);
+        };
 
     }
 
+    // Add behaviour when the submit button ("Dodaj ksiazke") is clicked
     document.querySelector('form').addEventListener('submit', function(e) {
         e.preventDefault(); // don't reload the page when clicking Dodaj ksiazke
 
