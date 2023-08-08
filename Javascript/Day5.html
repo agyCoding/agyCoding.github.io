@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Summer of Code - Day 5</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+  <body>
+    <div class="container" id="book-form">
+        <div class="row">
+            <div class="col-sm-2 text-center">
+                Dodaj kwiatek &#127804;
+            </div>
+            <div class="col-sm-2 text-center">
+                Podlej kwiatek &#128167;
+            </div>
+            <div class="col-sm-2 text-center">
+                Nawieź kwiatek &#128169;
+            </div>
+            <div class="col-sm-2 text-center">
+                Ratuj kwiatek &#128657;
+            </div>
+            <div class="col-sm-2 text-center">
+                Zetnij kwiatek &#128298;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 p-12 bg-success">
+                &#127804;
+            </div>
+        </div>
+    </div>
+
+
+  </body>
+  <script>
+    function addPlant() {
+        // dodaj kwiatek.
+    }
+    function waterPlants() {
+        // podlej kwiatki. Każde podlanie zwiększa rozmiar rośliny (zmienia rozmiar czcionki emoji rośliny).
+        // Jeśli roślina zostanie podlana więcej niż określoną liczbę razy (np. 5, 10), zamiera i zmienia się w emoji brązowych liści
+    }
+    function fertilize() {
+        // Każde dodanie nawozu powoduje, że na grządce pojawia się dodatkowa roślina. Jednakże, użytkownik nie może mieć więcej niż 10 roślin na grządce.
+    }
+    function rescuePlants() {
+        // Jeśli roślina zamarła, użytkownik może ją uratować, klikając na emoji karetki. Roślina wtedy „odżywa” i zaczyna od nowa. Jeśli jest więcej niż jedna roślina, karetka ratuje wszystkie zmarłe rośliny.
+    }
+    function cutPlant(index) {
+        // Użytkownik musi podać numer rośliny, którą chce ściąć. Jeśli jest tylko jedna roślina, jest ona „ożywiana” i ilość wody dla tej rośliny jest resetowana do 0.
+    }
+  </script>
+</html>
