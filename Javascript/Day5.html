@@ -29,10 +29,8 @@
                 <button type="button" class="btn btn-light" id="cutButton">Zetnij kwiatek &#128298;</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 p-12 bg-success" id="garden">
+        <div class="row bg-success" id="garden">   
                 &#127804;
-            </div>
         </div>
     </div>
 
@@ -55,14 +53,19 @@
         // clear the display of the garden
         garden.innerHTML = "";
 
-        for (let i=0;i<plants.length;i++) {
-            // if the plant is dead (overwatered), ignore it's type and display a brown leaf
-            if (plants[i].state==="dead") {
-                garden.innerHTML += "&#127810; ";
-            } else {
-                garden.innerHTML += plants[i].flowerType+" ";
-            }
+        for (let i = 0; i < plants.length; i++) {
+        let plantElement = document.createElement("div");
+        plantElement.className = "col-sm-2";
+        // if the plant is dead (overwatered), ignore it's type and display a brown leaf
+        if (plants[i].state === "dead") {
+            plantElement.innerHTML = "&#127810; ";
+        } else {
+            plantElement.innerHTML = plants[i].flowerType + " ";
         }
+        let size = 100+(plants[i].water * 10);
+        plantElement.style.fontSize = size + "%";
+        garden.appendChild(plantElement);
+    }
     }
 
     function addPlant() {
@@ -73,40 +76,46 @@
     }
     function waterPlants() {
         for (let i=0;i<plants.length;i++) {
-            if (plants[i].water < 10) {
-                plants[i].water++;
-            } else if (plants[i].water == 10) {
+            let waterAmount = 1/plants.length;
+            if (plants[i].state == "alive") {
+                plants[i].water+=waterAmount;
+            };
+            if (plants[i].water >= 10) {
                 plants[i].state = "dead";
             };
         }
-        // podlej kwiatki. Każde podlanie zwiększa rozmiar rośliny (zmienia rozmiar czcionki emoji rośliny).
-        // Jeśli roślina zostanie podlana więcej niż określoną liczbę razy (np. 5, 10), zamiera i zmienia się w emoji brązowych liści
+        displayPlants();
     }
     function fertilize() {
         if (plants.length<10) {
             addPlant();
         }
-        // Każde dodanie nawozu powoduje, że na grządce pojawia się dodatkowa roślina. Jednakże, użytkownik nie może mieć więcej niż 10 roślin na grządce.
+    // użytkownik nie może mieć więcej niż 10 roślin na grządce.
     }
     function rescuePlants() {
         for (let i=0;i<plants.length;i++) {
             if (plants[i].state === "dead") {
-                plants[i].water === 0;
-                plants[i].state === "alive"
+                plants[i].water = 0;
+                plants[i].state = "alive"
             };
         };
+        displayPlants();
         // Jeśli roślina zamarła, użytkownik może ją uratować, klikając na emoji karetki. Roślina wtedy „odżywa” i zaczyna od nowa. Jeśli jest więcej niż jedna roślina, karetka ratuje wszystkie zmarłe rośliny.
     }
     function cutPlant(index) {
         let plantIndex = prompt("Którą roślinę chcesz zciąć?","");
-        if (!isNaN(plantIndex)) {
-            if (plantIndex < plants.length) {
-                plants.splice(plantIndex,1);
+        if (plantIndex !== null) {
+            plantIndex = parseInt(plantIndex);
+
+            if ((plantIndex > 0) && (plantIndex <= plants.length)) {
+                // Assuming that the user doesn't know that the plant count starts from 0 and not 1
+                plants.splice(plantIndex-1,1);
             }
-        }
-        if (!plants.length > 0) {
+        if (plants.length === 0) {
             addPlant();
         }
+        displayPlants();
+        };
         // Użytkownik musi podać numer rośliny, którą chce ściąć. Jeśli jest tylko jedna roślina, jest ona „ożywiana” i ilość wody dla tej rośliny jest resetowana do 0.
     }
 
