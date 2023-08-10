@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dzien 3 - API Summer of Code</title>
+  </head>
+  <body>
+
+  </body>
+  <script>
+    fetch('https://reqres.in/api/users?page=1', {
+        method: 'GET'
+    })
+    .then(res => res.json())
+    .then(data => {
+        let people = data.data;
+        for (let i=0;i < people.length;i++) {
+            console.log("First name: "+people[i].first_name);
+            console.log("Last name: "+people[i].last_name);
+            console.log("Email: "+people[i].email);
+            console.log("----");
+        }
+    })
+
+  </script>
+</html>
