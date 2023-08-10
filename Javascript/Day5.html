@@ -30,13 +30,16 @@
             </div>
         </div>
         <div class="row bg-success" id="garden">   
-                &#127804;
+                
         </div>
     </div>
 
 
   </body>
   <script>
+    let windowHeight = window.innerHeight;
+    let wH60 = windowHeight*0.6;
+
     class Plant {
         constructor(flowerType,water,state) {
             this.flowerType = flowerType; // type of flower in HTML code
@@ -53,19 +56,34 @@
         // clear the display of the garden
         garden.innerHTML = "";
 
+        // Get the computed font size of the existing garden element
+        let computedStyle = window.getComputedStyle(garden);
+        let fontSizeInPixels = parseFloat(computedStyle.fontSize)+100;
+
         for (let i = 0; i < plants.length; i++) {
-        let plantElement = document.createElement("div");
-        plantElement.className = "col-sm-2";
-        // if the plant is dead (overwatered), ignore it's type and display a brown leaf
-        if (plants[i].state === "dead") {
-            plantElement.innerHTML = "&#127810; ";
-        } else {
-            plantElement.innerHTML = plants[i].flowerType + " ";
+            let plantElement = document.createElement("div");
+            plantElement.className = "col-sm-2";
+            // if the plant is dead (overwatered), ignore it's type and display a brown leaf
+            if (plants[i].state === "dead") {
+                plantElement.innerHTML = "&#127810; ";
+            } else {
+                plantElement.innerHTML = plants[i].flowerType + " ";
+            };
+           
+            let size = fontSizeInPixels+(plants[i].water * 10);
+
+            // If the plant reached the max size, inform the user
+            if (size > wH60) {
+                alert((i+1)+". kwiatek osiągnął swój maksymalny rozmiar.");        
+            };
+
+            // If the size calculated from watering is smaller than 60% window height, display it
+            // If not, display size equal to 60% of window height
+            size = Math.min(size,wH60); 
+
+            plantElement.style.fontSize = size+"%";
+            garden.appendChild(plantElement);  
         }
-        let size = 100+(plants[i].water * 10);
-        plantElement.style.fontSize = size + "%";
-        garden.appendChild(plantElement);
-    }
     }
 
     function addPlant() {
