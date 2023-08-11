@@ -10,15 +10,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        @import url(//fonts.googleapis.com/css?family=Montserrat:300,500);
-        .team4 {
+        @import url(http://fonts.googleapis.com/css?family=Montserrat:300,500);
+        .team4, .form1 {
         font-family: "Montserrat", sans-serif;
             color: #8d97ad;
         font-weight: 300;
         }
 
-        .team4 h1, .team4 h2, .team4 h3, .team4 h4, .team4 h5, .team4 h6 {
-        color: #3e4555;
+        .team4 h1, .team4 h2, .team4 h3, .team4 h4, .team4 h5, .team4 h6, .form1 h3, .form1 h6 {
+          color: #3e4555;
         }
 
         .team4 .font-weight-medium {
@@ -30,24 +30,10 @@
             font-size: 18px;
         }
 
-        .team4 .subtitle {
+        .team4 .subtitle, .form1 .subtitle {
             color: #8d97ad;
             line-height: 24px;
                 font-size: 13px;
-        }
-
-        .team4 ul li a {
-        color: #8d97ad;
-        padding-right: 15px;
-        -webkit-transition: 0.1s ease-in;
-        -o-transition: 0.1s ease-in;
-        transition: 0.1s ease-in;
-        }
-
-        .team4 ul li a:hover {
-        -webkit-transform: translate3d(0px, -5px, 0px);
-        transform: translate3d(0px, -5px, 0px);
-            color: #316ce8;
         }
     </style>
   </head>
@@ -56,49 +42,32 @@
         <section>
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5">
-                    <div class="py-5 team4">
-                        <div class="container">
-                          <div class="row justify-content-center mb-4">
-                            <div class="col-md-7 text-center">
-                              <h3 class="mb-3">Lista z Reqres API</h3>
-                              <h6 class="subtitle">Lista wyświetlona przy pomocy templateu dla Bootstrapa5</h6>
-                            </div>
+                    <div class="col-sm-4 py-5 d-flex flex-column justify-content-center form1">
+                      <h3 class="mb-3">Dodaj nową osobę</h3>
+                      <h6 class="subtitle">Użyj formularza poniżej żeby dodać nową osobę</h6>
+                      <form>
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" class="form-control" id="name" placeholder="Imię" name="name">
+                            <label for="name">Imię</label>
                           </div>
-                          <div class="row" id="peopleLiveInThisDiv">
-
+                          
+                          <div class="form-floating mt-3 mb-3">
+                            <input type="text" class="form-control" id="job" placeholder="Stanowisko" name="job">
+                            <label for="job">Stanowisko</label>
                           </div>
-                        </div>
-                      </div>
-                      <div class="container">
+                          <button type="submit" class="btn btn-primary" id="addPersonButton">Dodaj osobę</button>
+                      </form>
+                    </div>
+                  <div class="col-sm-8 py-5 ">
                         <div class="row justify-content-center mb-4">
-                          <div class="col-md-7 text-center">
-                            <h3 class="mb-3">Dodaj nową osobę</h3>
-                            <h6 class="subtitle">Użyj formularza poniżej żeby dodać nową osobę</h6>
+                          <div class="col-md-7 text-center team4">
+                            <h3 class="mb-3">Lista z Reqres API</h3>
+                            <h6 class="subtitle">Lista wyświetlona przy pomocy templateu dla Bootstrapa5</h6>
                           </div>
                         </div>
-                        <div class="row" id="addAPerson">
-                            <form>
-                                <div class="form-floating mb-3 mt-3">
-                                    <input type="text" class="form-control" id="fName" placeholder="Imię" name="fName">
-                                    <label for="fName">Imię</label>
-                                  </div>
-                                  
-                                  <div class="form-floating mt-3 mb-3">
-                                    <input type="text" class="form-control" id="lName" placeholder="Nazwisko" name="lName">
-                                    <label for="lName">Nazwisko</label>
-                                  </div>
-                                  <div class="form-floating mt-3 mb-3">
-                                    <input type="email" class="form-control" id="email" placeholder="Email" name="email">
-                                    <label for="email">Email</label>
-                                  </div>
-                                  <div class="form-floating mt-3 mb-3">
-                                    <input type="url" class="form-control" id="picURL" placeholder="Link do zdjęcia" name="picURL">
-                                    <label for="picURL">Link do zdjęcia</label>
-                                  </div>
-                                  <button type="submit" class="btn btn-primary" id="addPersonButton">Dodaj osobę</button>
-                            </form>
-                        </div>
+                        <div class="row team4" id="peopleLiveInThisDiv">
                       </div>
+                  </div>
                     </div>
                 </div>
             </div>
@@ -112,69 +81,188 @@
 
   
   <script>
-    function displayPeople() {
-        fetch('https://reqres.in/api/users?page=1', {
-        method: 'GET'
-        })
-        .then(res => res.json())
-        .then(data => {
-            let people = data.data;
-            for (let i=0;i < people.length;i++) {
+    async function fetchUsers(page) {
+      try {
+        const response = await fetch(`https://reqres.in/api/users?page=${page}`);
+        console.log(`https://reqres.in/api/users?page=${page}`);
+      
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      
+        const data = await response.json();
+        console.log(data);
+        
+        let people = data.data;
+        let maxPages = data.total_pages;
+        /*
+        for (let i=0;i < people.length;i++) {
                 console.log("First name: "+people[i].first_name);
                 console.log("Last name: "+people[i].last_name);
                 console.log("Email: "+people[i].email);
                 console.log("Avatar: "+people[i].avatar);
                 console.log("----");
-            }
+        }
+        */
+        let peopleDisplay = document.getElementById("peopleLiveInThisDiv");
+        for (let i=0;i < people.length;i++) {
+            let personBoxElement = document.createElement("div");
+            personBoxElement.classList.add("col-lg-3", "mb-4");
 
-            let peopleDisplay = document.getElementById("peopleLiveInThisDiv");
+            let rowElement = document.createElement("div");
+            rowElement.classList.add("row");
 
-            for (let i=0;i < people.length;i++) {
-                let personBoxElement = document.createElement("div");
-                personBoxElement.classList.add("col-lg-3", "mb-4");
+            let colMd12Element = document.createElement("div");
+            colMd12Element.classList.add("col-md-12");
 
-                let rowElement = document.createElement("div");
-                rowElement.classList.add("row");
+            let imgElement = document.createElement("img");
+            imgElement.classList.add("img-fluid", "rounded-circle");
+            imgElement.src = people[i].avatar;
 
-                let colMd12Element = document.createElement("div");
-                colMd12Element.classList.add("col-md-12");
+            colMd12Element.appendChild(imgElement);
 
-                let imgElement = document.createElement("img");
-                imgElement.classList.add("img-fluid", "rounded-circle");
-                imgElement.src = people[i].avatar;
+            let colTextElement = document.createElement("div");
+            colTextElement.classList.add("col-md-12", "text-center");
+            let ptElement = document.createElement("div");
+            ptElement.classList.add("pt-2");
 
-                colMd12Element.appendChild(imgElement);
+            let h5Element = document.createElement("h5");
+            h5Element.classList.add("mt-4", "font-weight-medium", "mb-0");
+            h5Element.textContent = people[i].first_name + " " + people[i].last_name;
 
-                let colTextElement = document.createElement("div");
-                colTextElement.classList.add("col-md-12", "text-center");
-                let ptElement = document.createElement("div");
-                ptElement.classList.add("pt-2");
+            let h6Element = document.createElement("h6");
+            h6Element.classList.add("subtitle", "mb-3");
+            h6Element.textContent = people[i].email;
 
-                let h5Element = document.createElement("h5");
-                h5Element.classList.add("mt-4", "font-weight-medium", "mb-0");
-                h5Element.textContent = people[i].first_name + " " + people[i].last_name;
-
-                let h6Element = document.createElement("h6");
-                h6Element.classList.add("subtitle", "mb-3");
-                h6Element.textContent = people[i].email;
-
-                ptElement.appendChild(h5Element);
-                ptElement.appendChild(h6Element);
+            ptElement.appendChild(h5Element);
+            ptElement.appendChild(h6Element);
 
 
-                colTextElement.appendChild(ptElement);
+            colTextElement.appendChild(ptElement);
 
-                rowElement.appendChild(colMd12Element);
-                rowElement.appendChild(colTextElement);
+            rowElement.appendChild(colMd12Element);
+            rowElement.appendChild(colTextElement);
 
-                personBoxElement.appendChild(rowElement);
+            personBoxElement.appendChild(rowElement);
 
-                peopleDisplay.appendChild(personBoxElement);
-            }
-        })
+            peopleDisplay.appendChild(personBoxElement);
+        }
+        if (maxPages>1) {
+          let paginationRow = document.createElement("div");
+          paginationRow.classList.add("row");
+          paginationRow.setAttribute("id","paginationRow");
+          
+
+          let ulPagination = document.createElement("ul");
+          ulPagination.classList.add("pagination","justify-content-center");
+          ulPagination.style.margin = "20px 0";
+          
+          let previousElement = document.createElement("li");
+          previousElement.classList.add("page-item");
+          
+          let previousLink = document.createElement("a");
+          previousLink.classList.add("page-item");
+          previousLink.href = "#";
+          previousLink.textContent = "Previous";
+          
+          previousElement.appendChild(previousLink);
+
+          ulPagination.appendChild(previousElement);
+
+          for (let i=0; i<maxPages;i++) {       
+            let listElement = document.createElement("li");
+            listElement.classList.add("page-item");
+
+            let listLink = document.createElement("a");
+            listLink.classList.add("page-item");
+            listLink.href = "#"; 
+            listLink.textContent = i+1;
+
+            listElement.appendChild(listLink);
+            ulPagination.appendChild(listElement);
+          }
+
+          let nextElement = document.createElement("li");
+          nextElement.classList.add("page-item");
+
+          let nextLink = document.createElement("a");
+          nextLink.classList.add("page-item");
+          nextLink.href = "#";
+          nextLink.textContent = "Next";
+          
+          nextElement.appendChild(nextLink);
+
+          ulPagination.appendChild(nextElement);
+            
+          paginationRow.appendChild(ulPagination);
+
+          peopleDisplay.appendChild(paginationRow);
+        }
+      } catch (error) {
+        console.error('Error', error);
+      }
     }
 
-    window.onload = displayPeople();
+    document.addEventListener("DOMContentLoaded", () => {
+          fetchUsers(1);
 
+          const paginationRow  = document.querySelector('paginationRow ');
+
+          paginationRow.addEventListener('click', async (event) => {
+            if (event.target.classList.contains('page-item')) {
+              let pageNumber = event.target.textContent;
+
+              if (isNaN(pageNumber)) {
+                pageNumber = 1;
+              }
+
+              await fetchUsers(pageNumber);
+            }
+          });
+    });
+
+
+    async function registerUser(inputName,inputJob) {
+      try {
+        const response = await fetch("https://reqres.in/api/users", {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+             name: inputName,
+            job: inputJob
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          alert('Udało się zarejestrować nowego użytkownika. Imię: '+inputName+' Stanowisko: '+inputJob);
+          console.log(data);
+          
+          document.getElementById('name').value = '';
+          document.getElementById('job').value = '';
+
+        } else {
+          console.log("Request failed with status: ", response.status);
+        }
+
+      } catch (error) {
+        console.log('Error: ', error);
+      };
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // don't reload the page when clicking Dodaj ksiazke
+
+        let name = document.getElementById('name').value.trim();
+        let job = document.getElementById('job').value.trim();
+
+        if (name!=="" && job!=="") {
+          registerUser(name,job);
+        } else {
+          alert("Musisz wypełnić pola.")
+        };
+    });
   </script>
 </html>
